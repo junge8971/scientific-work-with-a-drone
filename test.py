@@ -77,10 +77,38 @@ def matching_points_with_FLANN(img1:np.ndarray, img2:np.ndarray):
     img3 = cv.drawMatchesKnn(img1,kp1,img2,kp2,matches,None,**draw_params)
     plt.imshow(img3,),plt.show()
 
+def stiching_img_with_build_in_funtions(img1:np.ndarray, img2:np.ndarray):
+    '''https://www.geeksforgeeks.org/opencv-panorama-stitching/'''
+    #for img in imgs:
+    #    img = cv.resize(img, (0,0), fx=0.4, fy=0.4)
+
+    stitchy=cv.Stitcher.create(cv.Stitcher_PANORAMA)
+    print(f'{stitchy=}')
+    (dummy,output) = stitchy.stitch(img1, img2)
+    print(f'{dummy=} {output=}')
+
+    if dummy != cv.STITCHER_OK:
+    # checking if the stitching procedure is successful
+    # .stitch() function returns a true value if stitching is
+    # done successfully
+        print("stitching ain't successful")
+
+        # final output
+        cv.imshow('1',img1)
+        cv.imshow('2', img2)
+        cv.imshow('final result',output)
+        cv.imwrite('1_and_2.TIF', output)
+
+        cv.waitKey(0)
+    else:
+        print('Your Panorama is ready!!!')
+
+
 if __name__ == '__main__':
-    img1 = cv.imread('1.TIF',cv.IMREAD_GRAYSCALE) # queryImage
-    img2 = cv.imread('2.TIF',cv.IMREAD_GRAYSCALE) # trainImage
+    img1 = cv.imread(r'1.TIF',) # queryImage
+    img2 = cv.imread(r'2.TIF',) # trainImage
 
     #matching_points_with_ORB(img1=img1, img2=img2)
     #matching_points_with_SIFT(img1=img1, img2=img2)
-    matching_points_with_FLANN(img1=img1, img2=img2)
+    #matching_points_with_FLANN(img1=img1, img2=img2)
+    stiching_img_with_build_in_funtions(img1, img2)
